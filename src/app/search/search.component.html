@@ -1,0 +1,65 @@
+<section>
+
+    <!-- search band form with keyup event -->
+    <form [formGroup]="searchForm">
+        <label>
+           <input class="col-12" type="text" (keyup)="searchTerm.next($event)" formControlName="search" placeholder="Search here ..." />
+        
+           <div *ngIf="loading">
+                <p class="search-message">Searching</p>
+                <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+           </div>
+        </label>    
+
+    </form>
+
+    <!-- display search results for artists -->
+    <div *ngIf="searchResults">
+      <div class="results" >
+          <div class="col-12">
+                <h5>Search results for <em>"{{this.term}}"</em></h5>
+          </div>
+        <div class="repo" (click)="searchEvents($event)" *ngFor="let result of searchResults">
+            <div>
+                <img loading="lazy" [attr.src]="result.image_url"
+                    width="200"
+                    height="auto"
+                    alt="artist"
+                />
+                <h3>{{result.name}}</h3>
+                <p>{{result.facebook_page_url|slice:11}}</p>
+                <!-- <p><em>Upcoming Event Count</em>: {{result.upcoming_event_count}}</p> -->
+            </div>  
+        </div>
+    </div>
+    </div>
+   <!-- display error message -->
+    <div *ngIf="errorMessage" class="errorMessage">
+        <h2>Error</h2>
+        <p class="error">{{errorMessage}}</p>
+    </div>
+
+    <!-- display search results for artist events -->
+    <div *ngIf="searchEventResults">
+        <div *ngIf="noEventCountFlag">
+            <h5>There are no upcoming events for <em>"{{this.term}}"</em></h5>
+        </div>
+        <!-- if upcoming event count of artist  is greater than 0 then display results-->
+        <div *ngIf="eventCountFlag" class="results" >
+            <div class="col-12">
+            <button type="button" class="btn btn-info col-6" (click)= "back(this.term)"> back </button>
+          </div>
+          <div class="repo" *ngFor="let result of searchEventResults">
+              <div>
+                  <h4>{{"Event Details"}}</h4>
+                  <p><em>Country</em>: {{result.venue.country}}</p>
+                  <p><em>City</em>: {{result.venue.city}}</p>
+                  <p><em>Venue</em>: {{result.venue.name}}</p>
+                  <p><em>Date</em>: {{result.datetime|slice :0:10}}</p>
+              </div>  
+          </div>
+      </div>
+      </div>
+
+
+</section>
